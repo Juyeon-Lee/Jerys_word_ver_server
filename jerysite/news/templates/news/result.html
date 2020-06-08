@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+{% load jerysword_extras %}
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>JERY's WORD::Result Page</title>
+    <!--<link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}" />-->
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+
+  <title>Result</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/index.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/result.css' %}" rel="stylesheet" />
+</head>
+
+<body id="page-top">
+
+  <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <!-- 웹사이트 로고-->
+            <a class="navbar-brand" href="{% url 'index' %}">
+              <h4 class="wrap py-2">JERY's WORD</h4>
+            </a>
+            <form method="post" action="{% url 'result' topic.topic topic.id%}"
+                  enctype="text/plain" class="form-inline my-0 my-lg-0"
+                    id="form_search_result">
+<!--              <input class="form-control mr-sm-2" type="search" value="검색어">-->
+              {%csrf_token%}{{form.as_p}} <!-- instead of input tag -->
+              <button class="btn btn-warning my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        </div>
+    </nav>
+
+    <div id="loading"> <!--form submit 전에는 안보이도록 -->
+            <div class="container">
+                <div class="text-center" >
+                    <img src="{% static 'img/loading_spinner.gif' %}" />
+                    <p>유사도에 따른 기사와 댓글 워드 클라우드를 추출 중입니다.<br> 잠시만 기다려주세요.</p>
+                </div>
+            </div>
+        </div>
+
+  <!-- Header -->
+  <!-- 추천 토픽 리스트 -->
+ <header class="topics bg-light py-2 pt-5 pb-3">
+   <div class="container text-center">
+     <h4 class="pb-3">다음 키워드로도 검색해보시겠어요?</h4>
+     <h5 class="sty">'{{topic.topic}}'와 유사한 토픽들</h5>
+     <ul class="topic-list list-group-horizontal">
+        <li id="topic1" class="topic-data" href="#">
+          <!-- 토픽 데이터 삽입될 곳 -->
+          {{topic.simword1}}</li>
+        <li id="topic2" class="topic-data" href="#">
+            {{topic.simword2}}</li>
+        <li id="topic3" class="topic-data" href="#">
+            {{topic.simword3}}</li>
+        <li id="topic4" class="topic-data" href="#">
+            {{topic.simword4}}</li>
+        <li id="topic5" class="topic-data" href="#">
+            {{topic.simword5}}</li>
+      </ul>
+
+   </div>
+ </header>
+
+  <div id="loading"> <!--form submit 전에는 안보이도록 -->
+      <div class="container">
+          <div class="text-center" >
+              <img src="{% static 'img/loading_spinner.gif' %}" />
+              <p>유사도에 따른 기사와 댓글 워드 클라우드를 추출 중입니다.<br> 잠시만 기다려주세요.</p>
+          </div>
+      </div>
+  </div>
+
+<!-- Page Content -->
+<!-- 기사 리스트 섹션-->
+<section class="page-section" id="article">
+  <div class="container text-center">
+    <div>
+    <!-- ""부분에 키워드 넘겨주기-->
+      <h3>이 토픽과 함께 검색한 뉴스 목록</h3>
+    </div>
+
+    <!--기사 리스트 레이아웃-->
+    <div class="mt-5">
+      <ul class="list-group list-group-flush" style="text-align: center;">
+        <!-- 기사 자동 반복-->
+        {% for art in list %}
+          <li class="list-group-item article-list">
+            <div class="row">
+              <!-- 언론사 -->
+              <div id="pressCom1" class="press-company col-12 col-md-2 my-auto">
+                {{art.source}}
+              </div>
+              <div class="col-9 col-md-8">
+                <!-- 기사 제목 -->
+                  <a href="{{ art.url }}">
+                    <div id="articleTtl1" class="article-title row">
+                        {% autoescape off %}
+                            {{ art.title }}
+                        {% endautoescape %}
+                    </div>
+                  </a>
+                <!-- 기사 프리뷰 / 날짜 -->
+                <div id="articlePre1" class="article-preview row">
+                  {% autoescape off %}
+                        {{ art.description }}
+                    {% endautoescape %} | {{art.time}}
+                </div>
+              </div>
+              <!-- 유사도 -->
+              <div id="articleSim1" class="sim-value value1 col-2 col-md-2 my-auto ml-auto">
+                {{art.similarity}}%
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 워드클라우드 섹션-->
+<section id="wordcloud" class="page-section bg-light">
+  <div class="container text-center">
+    <div>
+      <h3> 날짜별 댓글 반응 변화</h3>
+    </div>
+    <div class="row mt-5">
+        {% for wc in wordcloud %}
+      <!-- 워드클라우드 list (0~3일차/4~6일차/7~9일차) -->
+      <div class="col-md-4">
+        <div class="card">
+          <!-- 워드클라우드 이미지 삽입 위치 -->
+          <a href="{{ wc.get_absolute_url }}">
+            <!-- if 문으로 기본/생성이미지 선택-->
+            {% if wc.wcphoto %}
+              <img class="card-img-top" src="{{ wc.wcphoto.url }}" alt="wordcloud1">
+            {% else %}
+              <img class="card-img-top" src="{% static 'img/no_image.png' %}" alt="wordcloud1">
+            {% endif %}
+          </a>
+          <div class="card-body card-body-style">
+            <!-- 워드클라우드 날짜 삽입 위치 -->
+              <!-- 날짜 세팅  00/00 ~ 00/00(기간: {{wc.period}})-->
+            <p class="card-text text-center">
+                {% cycle '0' '4' '7' as end1 silent %}
+                {% cycle '3' '6' '9' as start1 silent %}
+                {{ end1|subDays|date:"m월 d일"}} ~ {{ start1|subDays|date:"m월 d일"}}
+
+            </p>
+          </div>
+        </div>
+      </div>
+        {% endfor %}
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+</section>
+
+
+  <!-- Footer -->
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">Copyright © JERY's WORD 2020</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Third party plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/search_loading.js' %}"></script>
+</body>
+
+</html>

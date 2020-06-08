@@ -1,0 +1,131 @@
+/*!
+ * Start Bootstrap - Small Business (https://startbootstrap.com/template-overviews/small-business)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-small-business/blob/master/LICENSE)
+ */
+body {
+  padding-top: 54px;
+}
+
+div#loading{
+  display: none;
+  position: fixed;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  z-index: 9999;
+  background-color: #DDDDDD;
+  opacity: 0.6;  /*투명도*/
+  padding: 20%;
+}
+
+img#btn-search{
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+header.topics{
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+h5.sty{
+    color: #ffb907;
+}
+
+ul.topic-list{
+   list-style:none;
+   font-size: 1.3rem;
+   color: #565656;
+   overflow: hidden;
+   text-align: center;
+}
+li.topic-data{
+   padding-top: 5px;
+   padding-bottom: 5px;
+   padding-right: 10px;
+   padding-left: 10px;
+   margin-right: 1.5rem;
+   display: inline-block;
+}
+
+li.article-list{
+  display: inline-block;
+}
+li.article-list:hover{
+  background-color: #F6F6F6;
+}
+
+div.press-company{
+  font-size: 1.2rem;
+  display: table;
+}
+.press-company span {
+  vertical-align:middle;
+  display: table-cell;
+}
+
+div.article-title{
+  font-size: 1.5rem;
+  padding-left: 0.5rem;
+}
+
+div.article-preview{
+  color: #8C8C8C;
+  font-size: 1.1rem;
+  padding-left: 0.5rem;
+}
+
+div.article-info{
+  color: #8C8C8C;
+  font-size: 1rem;
+  padding-left: 0.5rem;
+}
+
+div.sim-value{
+  color: #662500;
+  font-size: 1.3rem;
+  display: table;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 2rem;
+}
+
+div.value1{
+    background-color: #ffdd6e;
+}
+div.value2{
+    background-color: #ffd86e;
+}
+div.value3{
+    background-color: #ffd36e;
+}
+div.value4{
+    background-color: #ffcf6e;
+}
+div.value5{
+    background-color: #ffca6e;
+}
+div.value6{
+    background-color: #ffc56d;
+}
+div.value7{
+    background-color: #ffc06d;
+}
+div.value8{
+    background-color: #ffbc6d;
+}
+div.value9{
+    background-color: #ffb66c;
+}
+div.value10{
+    background-color: #ffb16c;
+}
+
+.wrap{
+  font-family: "Montserrat";
+  color: #fed136;
+  margin-bottom: 0rem;
+}

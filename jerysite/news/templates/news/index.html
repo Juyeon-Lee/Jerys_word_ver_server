@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+{% load jerysword_extras %}
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>JERY's WORD::Index</title>
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstra/p)-->
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/index.css' %}" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <div class="container">
+                <!-- 웹사이트 로고-->
+                <a class="navbar-brand js-scroll-trigger" href="#page-top">
+                    JERY's WORD
+                </a>
+            </div>
+        </nav>
+
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container">
+            <div class="masthead-heading text-uppercase">Fulfill your Curiosity</div>
+            <div class="row">
+            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+              <form class="form-field" method="post" id="form_search" enctype="text/plain">
+                <div class="form-row align-items-center">
+                  <div class="col-1 col-sm-1 col-md-1 h-100">
+                    <!-- 돋보기 이미지(버튼X) -->
+                    <img id="btn-search" alt="searchBtn" src="{% static 'img/ic-search.png' %}">
+                  </div>
+                  <div class="col-10 col-sm-10 col-md-10 mb-md-0">
+                    <!-- 키워드 검색 창 -->
+<!--                    <input style="background-color:transparent;" type="keyword" class="form-control form-control-lg keyword-field" placeholder="검색어를 입력하세요.">-->
+                      {%csrf_token%}{{form.as_p}} <!-- instead of input tag -->
+                  </div>
+                </div>
+              </form>
+                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            </div>
+            </div>
+            </div>
+            <div class="masthead-subheading mt-5">더욱 정확한 검색 기능과 댓글 반응 시각화를 체험해 보세요</div>
+        </header>
+
+<!-- 로딩페이지-->
+
+        <div id="loading"> <!--form submit 전에는 안보이도록 -->
+            <div class="container">
+                <div class="text-center" >
+                    <img src="{% static 'img/loading_spinner.gif' %}" />
+                    <p><b>유사도에 따른 기사와 댓글 워드 클라우드를 추출 중입니다.<br> 잠시만 기다려주세요.<b></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services-->
+        <section class="page-section bg-light" id="services">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Services</h2>
+                    <h3 class="section-subheading text-muted">JERY's WORD의 주요 기능</h3>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-6 mb-md-0 mb-5">
+                        <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-newspaper fa-stack-1x fa-inverse"></i></span>
+                        <h4 class="my-3">연관도 높은 기사 검색</h4>
+                        <p class="text-muted">키워드 유사성 검사를 통해 연관도 높은 기사를 검색하고<br>검색된 기사와 키워드 간의 유사도를 수치와 아이콘으로 표현</p>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-eye fa-stack-1x fa-inverse"></i></span>
+                        <h4 class="my-3">기사 댓글 시각화</h4>
+                        <p class="text-muted">시간의 흐름에 따른 댓글 반응 변화를 한 눈에 알아보기 위해<br>검색된 기사의 댓글을 모아 날짜별로 워드 클라우드를 생성</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About-->
+        <section class="page-section" id="about">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Work Process</h2>
+                    <h3 class="section-subheading text-muted">JERY's WORD의 서비스 흐름도</h3>
+                </div>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="{% static 'img/process/model.jpg' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>Pre-trained Model</h4>
+                                <h5 class="subheading">for analyzing news keywords</h5>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">JERY's WORD는 좀 더 연관도 높은 검색 결과를 보여주기 위해 사용자 키워드 분석 시 기존의 인공 신경망 모델에 뉴스 기사를 학습시켜 만든 뉴스 용어 분석에 최적화시킨 모델을 사용합니다.</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="{% static 'img/process/similarity.jpg' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>Calculating Similarity</h4>
+                                <h5 class="subheading">to show highly related articles</h5>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">유사도가 가장 높은 10개의 기사목록을 얻기 위해 학습시킨 모델과 인공신경망 오픈 소스 모델 word2vec을 이용하여 사용자가 입력한 키워드와 유사도가 가장 높은 단어들을 색출해낸 후 해당 단어들로 검색된 기사를 가지고 다시 한 번 키워드와의 유사성 검사를 진행합니다.</p></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="{% static 'img/process/reactions.jpg' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>WordCloud</h4>
+                                <h5 class="subheading">Visualizing comments</h5>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">워드 클라우드는 파이썬의 wordcloud 라이브러리를 이용하며 날짜 별로 유사도가 높은 상위 10개 기사에서 기사 당 40개의 댓글을 가져와 총 400개의 댓글로 만들어진 시각화 이미지입니다. 사용자는 기사를 눌러 댓글을 살피지 않아도 대략적인 반응을 살펴볼 수 있습니다.</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="{% static 'img/process/period.jpg' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>Setting the Period</h4>
+                                <h5 class="subheading">with more articles</h5>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">특정 기간에 대한 기사 목록를 더 받아 보고싶으세요? 워드 클라우드 이미지를 클릭해보세요. 확대된 워드 클라우드 이미지와 해당되는 기간의 더 많은 기사 목록을 확인하실 수 있습니다.</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4><br />Search Now!<br /></h4>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- About Us-->
+        <section class="page-section bg-light" id="team">
+            <div class="container">
+                <div class="text-center mb-4">
+                    <h2 class="section-heading text-uppercase">ABOUT US</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg">
+                        <div class="team-member">
+                            <h4>세종대학교 컴퓨터공학과</h4>
+                            <h5 class="mt-2">2020-1 캡스톤 디자인 002분반</h5>
+                            <p class="text-muted"></p>
+                            <h4>6조 팀 JERY</h4>
+                            <div class="row my-4">
+                                <div class="col-lg-3 mx-auto text-center text-body">
+                                    <img class="mx-auto rounded-circle mb-3 bordersty" src="{% static 'img/member/BR2.png' %}" alt="" />
+                                    <h5>16000000 박보람</h5>
+                                    <p>웹 프론트 / 웹 백엔드</p>
+                                </div>
+                                <div class="col-lg-3 mx-auto text-center text-body">
+                                    <img class="mx-auto rounded-circle mb-3 bordersty" src="{% static 'img/member/ME2.png' %}" alt="" />
+                                    <h5>16000000 손모은</h5>
+                                    <p>유사도 추정 / 데이터 시각화</p>
+                                </div>
+                                <div class="col-lg-3 mx-auto text-center text-body">
+                                    <img class="mx-auto rounded-circle mb-3 bordersty" src="{% static 'img/member/JY2.png' %}" alt="" />
+                                    <h5>16011080 이주연</h5>
+                                    <p>웹 백엔드 / 유사도 추정</p>
+                                </div>
+                                <div class="col-lg-3 mx-쟝 text-center text-body">
+                                    <img class="mx-auto rounded-circle mb-3 bordersty" src="{% static 'img/member/YJ2.png' %}" alt="" />
+                                    <h5>16000000 최유진</h5>
+                                    <p>웹 프론트 / 데이터 시각화</p>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="footer py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 text-lg-left">Copyright © JERY's WORD 2020</div>
+                    <div class="col-lg-6 text-lg-right"><a class="mr-3" href="#!">Privacy Policy</a><a href="#!">Terms of Use</a></div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <script src="{% static 'js/search_loading.js' %}"></script>
+    </body>
+</html>
