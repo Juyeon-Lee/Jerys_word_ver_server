@@ -37,4 +37,7 @@ static 파일 변경 후
 Username (leave blank to use 'user'): jeryadmin
 Email address: ljy97@kakao.com
 password : jery0514
+
+django.db.utils.OperationalError: no such table: news_topic 과 같은 에러가 날때 : 
+>>python manage.py migrate --run-syncdb
 """

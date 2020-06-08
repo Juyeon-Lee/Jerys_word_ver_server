@@ -15,8 +15,8 @@ div#loading{
   top:0;
   bottom:0;
   z-index: 9999;
-  background-color: #DDDDDD;
-  opacity: 0.6;  /*투명도*/
+  background-color: rgba(219, 219, 219, 0.938);
+  opacity: 1;  /*투명도*/
   padding: 20%;
 }
 
@@ -96,14 +96,36 @@ div.sim-value{
 div.value1{
     background-color: #ffdd6e;
 }
+div.value2{
+    background-color: #ffd86e;
+}
+div.value3{
+    background-color: #ffd36e;
+}
+div.value4{
+    background-color: #ffcf6e;
+}
+div.value5{
+    background-color: #ffca6e;
+}
+div.value6{
+    background-color: #ffc56d;
+}
+div.value7{
+    background-color: #ffc06d;
+}
+div.value8{
+    background-color: #ffbc6d;
+}
+div.value9{
+    background-color: #ffb66c;
+}
+div.value10{
+    background-color: #ffb16c;
+}
 
 .wrap{
   font-family: "Montserrat";
   color: #fed136;
   margin-bottom: 0rem;
-}
-
-.card-body-style{
-    background: #fed136;
-    color: #ffffff;
 }

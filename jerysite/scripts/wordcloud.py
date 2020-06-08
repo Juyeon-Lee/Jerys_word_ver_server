@@ -35,6 +35,8 @@ class Wordcloud:
             #first_char = f.read(1)
             if not text:
                 print("file is empty")
+                # 임시 텍스트 파일 삭제
+                os.remove(os.path.join(settings.BASE_DIR, file_reactions))
                 return
             else:
                 print("file is full")
@@ -70,6 +72,7 @@ class Wordcloud:
         mask = np.array(Image.open(os.path.join(settings.BASE_DIR, 'scripts/static/mask_img_512px.png')))
         wc_image_gen = wc(font_path=os.path.join(settings.BASE_DIR, 'scripts/static/NanumSquareEB.ttf'),
                             mask=mask,
+                          background_color='white'
                           ).generate_from_frequencies(tags)   # wordcloud 용 댓글 하나도 없을 경우..
         wc_image_gen.to_file('scripts/static/'+file_name)  # 경로에 이미지 파일 생성
 
@@ -81,16 +84,14 @@ class Wordcloud:
 
         # 임시 이미지 파일 삭제
         os.remove(os.path.join(settings.BASE_DIR, 'scripts/static/'+file_name))
+        # 임시 텍스트 파일 삭제
+        os.remove(os.path.join(settings.BASE_DIR, file_reactions))
         """
         # Display the generated image:
         plt.imshow(wc_image_gen, interpolation='bilinear')
         plt.axis("off")
         plt.show()
         
-        # if file exits when to store a img file, delete and restore
-        if os.path.exists(filePath):
-            os.remove(filePath)
-        else:
         """
 
         # end_time = time.time()

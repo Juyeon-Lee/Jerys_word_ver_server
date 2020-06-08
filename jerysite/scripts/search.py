@@ -21,7 +21,8 @@ import pandas as pd
 from django.conf import settings
 from gensim.models import KeyedVectors
 from konlpy.tag import Okt
-from news.models import Topic, Article, WordCloud, WCArticle  # 빨간줄이지만 잘 실행됨.
+from news.models import Topic, SimTopic  # 빨간줄이지만 잘 실행됨.
+from news.models import Article, WordCloud, WCArticle  # 빨간줄이지만 잘 실행됨.
 
 from .article import Article as art  # jerysite.scripts
 from .wordcloud import Wordcloud as main_wc
@@ -35,6 +36,7 @@ class Search :
     """
 
     def __init__(self, topic_id) :
+        self.tmp_titles = []  # 기사 중복 막기 위해 제목 저장
         self.articles = []
         model = gensim.models.Word2Vec.load(os.path.join(settings.BASE_DIR, 'scripts/static/model_updated.model'))
         self.wv = model.wv
@@ -58,18 +60,22 @@ class Search :
         :param again=0: 원하는 양의 기사가 추출되지 않았을 때 start를 다르게 해서 시도하기 위함.
         :return:
         """
-        if again%2:
+        if again % 2 :
             sort = 'sim'
-        else:
+        else :
             sort = 'date'
         start = (330 * (period - 1) + 1) + (100 * again) if period else 1  # 기한 시작 위치 설정
+        if start < 0 :
+            start = 1
+        elif start > 999 :
+            start = 900
         topic_text = urllib.parse.quote('+'.join([str(t) for t in topic]))  # 한글 텍스트 인코딩
         num = 100 if period != 1 else 10  # 4~6일전, 7~9일전일 때 100개 뽑음.
         url = ('https://openapi.naver.com/v1/search/news.json?query='
                + topic_text +  # 키워드
                '&start=' + str(start) +  # 기한 시작 위치
-               '&display=' + str(num)   # 100개(최대) 기사 추출
-               + '&sort=' + sort  #정렬 기준 : 유사도(sim) / 날짜(date)- default
+               '&display=' + str(num)  # 100개(최대) 기사 추출
+               + '&sort=' + sort  # 정렬 기준 : 유사도(sim) / 날짜(date)- default
                )
         print(url)
         """set request using url"""
@@ -89,7 +95,7 @@ class Search :
         - period ==0 이며 10개 기사(0~9일)
         :return:
         """
-        articles = response.get('items')
+        articles = response['items']
         print('number of articles : ' + str(len(articles)))
 
         # 뽑을 날짜 설정
@@ -104,20 +110,22 @@ class Search :
         for article in articles :  # article :  source, url, title, time, description
             if cnt == 10 :  # 최대 10개만 저장.
                 break
-
-            time = datetime.datetime.strptime(article.get('pubDate'), '%a, %d %b %Y %H:%M:%S %z')
-            strtime = time.strftime("%Y-%m-%d %H:%M:%S")
+            title = self.preprocess(article["title"], slice=True)
+            if title in self.tmp_titles :  # 중복검사- 이미 있으면 건너뜀.
+                continue
+            print(title)
+            time = datetime.datetime.strptime(article['pubDate'], '%a, %d %b %Y %H:%M:%S %z')
+            strtime = time.strftime("%Y-%m-%d %H:%M")
             date = time.date()
             print(date)
-            if start <= date <= end :  # 기간에 맞는 기사만 저장.
+            if start <= date :  # 기간에 맞는 기사만 저장.
                 cnt += 1
             else :
                 continue  # 다음 article 검사
-            con = art(article.get('link'),
-                      article.get('title'),
-                      strtime,
-                      article.get('description')
-                      )
+
+            self.tmp_titles.append(title)  # 기사 중복 막기 위해 제목 저장
+            con = art(article['link'], title,
+                      strtime, self.preprocess(article['description']))
             art_list.append(con)
             # for문 종료
         print('cnt : %d' % cnt)
@@ -132,7 +140,7 @@ class Search :
         :param period: 기간 (1/2/3)
         :return:
         """
-        articles = response.get('items')
+        articles = response['items']
         print('number of articles : ' + str(len(articles)))
 
         # 뽑을 날짜 설정
@@ -147,32 +155,38 @@ class Search :
 
         cnt = 0
         url_list = []
-        for article in articles :  # article :  source, url, title, time, description
+        title_list = []
+        for article in articles :  # article :  url, title, time, description
             if cnt == 10 :  # 최대 10개만 저장.  https://news.naver.com/
                 break
-            urlobj = urlparse(article.get('link'))
+            urlobj = urlparse(article['link'])
             print(urlobj.netloc)
-            if urlobj.netloc != 'news.naver.com':   # 네이버 뉴스만 저장
+            if urlobj.netloc != 'news.naver.com' :  # 네이버 뉴스만 저장
                 continue
+            title = self.preprocess(article['title'], slice=True)  # 전처리
+            if title in title_list :  # 이미 있는 뉴스는 저장 안함.
+                continue
+            title_list.append(title)
+            print(title)
 
-            time = datetime.datetime.strptime(article.get('pubDate'), '%a, %d %b %Y %H:%M:%S %z')
-            strtime = time.strftime("%Y-%m-%d %H:%M:%S")
+            time = datetime.datetime.strptime(article['pubDate'], '%a, %d %b %Y %H:%M:%S %z')
+            strtime = time.strftime("%Y-%m-%d %H:%M")
             date = time.date()
             print(date)
             if start <= date <= end :  # 기간에 맞는 기사만 저장.
                 cnt += 1
             else :
                 continue  # 다음 article 검사
-            url = article.get('link')
+
+            url = article['link']
             url_list.append(url)
-            # Model Article : search(foreign), title, url, source, time, similarity=0, description
-            # Model WCArticle : wc(foreign), title, url, source, time, description
+
+            descrip = self.preprocess(article['description'])  # 전처리
             con = art(url, " ", " ", " ")
+            # Model WCArticle : wc(foreign), title, url, source, time, description
             WCArticle.objects.create(wc={1 : self.model_wc1, 2 : self.model_wc2, 3 : self.model_wc3}[period],
-                                     title=article.get('title'),
-                                     url=url,
-                                     source=con.source, time=strtime,
-                                     description=article.get('description'))
+                                     title=title, url=url,
+                                     source=con.source, time=strtime, description=descrip)
 
             # for문 종료
         print('cnt : %d' % cnt)
@@ -186,7 +200,7 @@ class Search :
         :param period: 기간 (1/2/3)
         :return: 기사 list, 유사도
         """
-        tmp_result = None
+        tmp_result = []
         num_list = [0, 1, -1, 2, -2, 3, -3]
         for num in num_list :
             request = self.set_request(topic, period, num)
@@ -200,23 +214,25 @@ class Search :
                 return None
 
             responsejson = json.loads(response_body)
-            if period ==0:      # 유사도 기사 검색용
+            if period == 0 :  # 유사도 기사 검색용
                 tmp_result = self.get_articles_original(responsejson)
             else :
-                tmp_result = self.get_articles_wc(responsejson, period)
-                if not len(tmp_result) :  # 값이 안나왔으면 다시 시도..
+                tmp_result.extend(self.get_articles_wc(responsejson, period))
+                if len(tmp_result) < 5 :  # 값이 5개 이상 안나왔으면 다시 시도..
                     print("true.... there is nothing..")
                     continue
 
             break  # while문 종료
         return tmp_result
 
-    @staticmethod
-    def preprocess(text) :
+    def preprocess(self, text, slice=False) :
         text = re.sub(r'\(종합[^)]*\)', '', text)  # (종합)/(종합*보)
         text = re.sub(r'\(상보[^)]*\)', '', text)  # (상보)
         text = re.sub(r'\[[^]]*\]', '', text)  # [단독|현장연결|...]
-        text = re.sub('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\"\'…》]', '', text)  # 특수 문자 없애기
+        text = re.sub('[-=+,#/\?:^$.@*\"※~%ㆍ!』\\‘|\(\)\[\]`\"\'…》]', '', text)  # 특수 문자 없애기
+        text = re.sub('<.*?>', '', text)
+        if slice and len(text) > 34:  # 35 자 이상은 뒤에 ...으로 대체
+            text = text[:35] + '...'
         return text
 
     def s2v_sim_with_word(self, text) :
@@ -249,49 +265,44 @@ class Search :
     def extract10sim_topic(self) :
         # 유사 topic 10 개 추출 -> 유사토픽 나온거 모델에 적용하기
         topic10 = self.wv.most_similar(self.topic, topn=10)
-        self.model_topic.simword1 = topic10[0][0]
-        self.model_topic.simword2 = topic10[1][0]
-        self.model_topic.simword3 = topic10[2][0]
-        self.model_topic.simword4 = topic10[3][0]
-        self.model_topic.simword5 = topic10[4][0]
-        self.model_topic.simword6 = topic10[5][0]
-        self.model_topic.simword7 = topic10[6][0]
-        self.model_topic.simword8 = topic10[7][0]
-        self.model_topic.simword9 = topic10[8][0]
-        self.model_topic.simword10 = topic10[9][0]
-        self.model_topic.save()  # DB 에 저장.
+        for i in range(10) :
+            SimTopic.objects.create(origin_topic=self.model_topic,
+                                    simtopic=topic10[i][0],
+                                    simrank=(i + 1),
+                                    similarity=round(topic10[i][1], 2))
         for i, t in enumerate(topic10) :
             print(str(i) + 'st of new 10 topics : ' + str(t[0]))
         return topic10
 
     def select_10art_use_simwords(self, topic10) :
+        start = time.time()
         # 총 10번 api 사용하여 총 100개 기사 추출 - self.articles에 저장
-        for i, t in enumerate(topic10) :
+        for t in topic10 :
             tem = [t[0], self.topic]
             arlist = self.get_result(tem, period=0)  # 10 개 기사 추출 - api 1번 호출
             self.articles.extend(arlist)
             print("누적 기사 수 : %d" % len(self.articles))
+        hundred = time.time()
 
-        # 중복검사
-        titles = []
-        arti = []
-        for n in self.articles :
-            if n.title not in titles :
-                titles.append(self.preprocess(n.title))
-                arti.append(n)
-        self.articles = arti
-        print('중복검사 완료 : %d, %d' % (len(titles), len(arti)))
+        print('중복검사 완료 : %d' % (len(self.tmp_titles)))
 
         # 중복검사 후의 기사 100개 중 제목의 유사도로 10개 추출, 유사도 저장
         df1 = pd.DataFrame({
             'article' : self.articles,
-            'title' : titles,
-            'sim' : [self.s2v_sim_with_word(t) for t in titles]},  # 제목과 키워드 유사도 도출 함수
-            index=range(len(titles))
+            'title' : self.tmp_titles,
+            'sim' : [self.s2v_sim_with_word(t) for t in self.tmp_titles]},  # 제목과 키워드 유사도 도출 함수
+            index=range(len(self.tmp_titles))
         )
+        sim = time.time()
         df1['rank'] = df1['sim'].rank(ascending=False)
         df1 = df1.sort_values(by='rank', ascending=True)  # rank 순으로 정렬
         # df1.to_csv('df.csv')
+        sort = time.time()
+        print("#" * 50)
+        print("hundred WorkTime: {0:0.2f} sec\n".format(hundred - start))  # 10sec
+        print("sim 계산 WorkTime: {0:0.2f} sec\n".format(sim - hundred))  # 4.4 sec
+        print("sort WorkTime: {0:0.2f} sec\n".format(sort - sim))  # 4.4 sec
+
         return df1
 
     def filter_model_error(self) :
@@ -312,14 +323,14 @@ class Search :
         urls = self.get_result(self.topic, period)
         tmp_crawler = Crawler(urls=urls, period=period)
         print('%s<<period==%d url test 출력>>%s' % ('=' * 20, period, '=' * 20))
-        if len(urls):
+        if len(urls) :
             print(urls[0])
-        #print('%s<<period==%d 기사 test 출력>>%s' % ('=' * 20, period, '=' * 20))
-        #for a in wc.articles :
+        # print('%s<<period==%d 기사 test 출력>>%s' % ('=' * 20, period, '=' * 20))
+        # for a in wc.articles :
         #    a.print()
         return tmp_crawler
 
-    def get_react_make_wc(self, crawler1, crawler2, crawler3):
+    def get_react_make_wc(self, crawler1, crawler2, crawler3) :
         """
         Cralwer 클래스 이용하여 댓글 모음 txt 생성
         Wordcloud.wordcloud 이미지 생성 후 DB저장
@@ -329,7 +340,7 @@ class Search :
         crawler2.get_reactions_total(underscore_topic)
         crawler3.get_reactions_total(underscore_topic)
         print("댓글 모음 txt 생성 완료")
-        
+
         custom_wc = main_wc(self.model_topic)
         custom_wc.wordcloud(period=1, topic=underscore_topic)
         custom_wc.wordcloud(period=2, topic=underscore_topic)

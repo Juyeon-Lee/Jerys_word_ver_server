@@ -33,16 +33,6 @@ def topic_validator(value) :
 class Topic(models.Model) :
     topic = TopicField(max_length=20, validators=[topic_validator])
     date = models.DateTimeField(auto_now_add=True, null=True)
-    simword1 = models.CharField(max_length=30, blank=True)
-    simword2 = models.CharField(max_length=30, blank=True)
-    simword3 = models.CharField(max_length=30, blank=True)
-    simword4 = models.CharField(max_length=30, blank=True)
-    simword5 = models.CharField(max_length=30, blank=True)
-    simword6 = models.CharField(max_length=30, blank=True)
-    simword7 = models.CharField(max_length=30, blank=True)
-    simword8 = models.CharField(max_length=30, blank=True)
-    simword9 = models.CharField(max_length=30, blank=True)
-    simword10 = models.CharField(max_length=30, blank=True)
 
     def get_absolute_url(self) :  # 안 쓰임. 이 함수를 추가하거나 view에 success_url을 추가해야 한다.
         return reverse('result', kwargs={'topic' : self.topic})
@@ -53,6 +43,16 @@ class Topic(models.Model) :
     def save(self, *args, **kwargs):  # date 갱신
         self.date = datetime.datetime.now()
         super(Topic, self).save(*args, **kwargs)
+
+
+class SimTopic(models.Model) :
+    origin_topic = models.ForeignKey(Topic, on_delete=models.CASCADE)  # topic
+    simtopic = models.CharField(max_length=30, blank=True)
+    simrank = models.IntegerField(blank=True)
+    similarity = models.FloatField(blank=True)
+
+    def __str__(self) :
+        return self.simtopic
 
 
 class Article(models.Model) :
@@ -106,4 +106,6 @@ https://docs.djangoproject.com/ko/3.0/intro/tutorial02/
 (models.py 에서) 모델을 변경합니다.
 python manage.py makemigrations을 통해 이 변경사항에 대한 마이그레이션을 만드세요.
 python manage.py migrate 명령을 통해 변경사항을 데이터베이스에 적용하세요.
+
+undefined 오류 발생시 python manage.py migrate --run-syncdb
 """

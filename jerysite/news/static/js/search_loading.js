@@ -24,6 +24,8 @@ function getCookie(c_name)
     return "";
  }
 
+
+
 $(document).ready(function () {
     //topic form id
     $("#topic-index-text").keydown(function (key) {
@@ -31,7 +33,11 @@ $(document).ready(function () {
         if (key.keyCode == 13) {
             key.preventDefault();
             var serializedData = $("#form_search").serialize();
+            console.log( $("#topic-index-text").val());
             console.log("submit 후 함수 실행중");
+            
+            
+
             $.ajax({
                 type: 'POST',
                 url: "",

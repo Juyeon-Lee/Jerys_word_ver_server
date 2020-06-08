@@ -49,7 +49,7 @@
             <div class="container">
                 <div class="text-center" >
                     <img src="{% static 'img/loading_spinner.gif' %}" />
-                    <p>유사도에 따른 기사와 댓글 워드 클라우드를 추출 중입니다.<br> 잠시만 기다려주세요.</p>
+                    <p><b>유사도에 따른 기사와 댓글 워드 클라우드를 추출 중입니다.<br> 잠시만 기다려주세요.<b></p>
                 </div>
             </div>
         </div>
@@ -59,21 +59,17 @@
  <header class="topics bg-light py-2 pt-5 pb-3">
    <div class="container text-center">
      <h4 class="pb-3">다음 키워드로도 검색해보시겠어요?</h4>
-     <h5 class="sty">'{{topic.topic}}'와 유사한 토픽들</h5>
+     <h5 class="sty">해당 키워드와 유사한 토픽</h5>
      <ul class="topic-list list-group-horizontal">
-        <li id="topic1" class="topic-data" href="#">
-          <!-- 토픽 데이터 삽입될 곳 -->
-          {{topic.simword1}}</li>
-        <li id="topic2" class="topic-data" href="#">
-            {{topic.simword2}}</li>
-        <li id="topic3" class="topic-data" href="#">
-            {{topic.simword3}}</li>
-        <li id="topic4" class="topic-data" href="#">
-            {{topic.simword4}}</li>
-        <li id="topic5" class="topic-data" href="#">
-            {{topic.simword5}}</li>
-      </ul>
+        {% for sim in topic.simtopic_set.all %}
+          {% if forloop.counter <= 5 %}
+            <li class="topic-data" href="#">
+              <!-- 토픽 데이터 삽입될 곳 -->
+              {{ sim.simtopic }}<br>{{ sim.similarity }}</li>
 
+          {% endif %}
+        {% endfor %}
+      </ul>
    </div>
  </header>
 
@@ -92,7 +88,7 @@
   <div class="container text-center">
     <div>
     <!-- ""부분에 키워드 넘겨주기-->
-      <h3>이 토픽과 함께 검색한 뉴스 목록</h3>
+      <h3>"{{topic.topic}}"(으)로 검색한 결과</h3>
     </div>
 
     <!--기사 리스트 레이아웃-->
@@ -118,8 +114,9 @@
                 <!-- 기사 프리뷰 / 날짜 -->
                 <div id="articlePre1" class="article-preview row">
                   {% autoescape off %}
-                        {{ art.description }}
-                    {% endautoescape %} | {{art.time}}
+                    {{ art.description }}
+                  {% endautoescape %}
+                  <br>| {{art.time}}
                 </div>
               </div>
               <!-- 유사도 -->
@@ -154,7 +151,7 @@
               <img class="card-img-top" src="{% static 'img/no_image.png' %}" alt="wordcloud1">
             {% endif %}
           </a>
-          <div class="card-body card-body-style">
+          <div class="card-body">
             <!-- 워드클라우드 날짜 삽입 위치 -->
               <!-- 날짜 세팅  00/00 ~ 00/00(기간: {{wc.period}})-->
             <p class="card-text text-center">
