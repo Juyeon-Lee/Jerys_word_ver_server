@@ -22,9 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'eca9#@qhab1075)tly4ro-75w(!0&40@o%%5c^)dc@@5&%1gwo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['.pythonanywhere.com','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['jerysword.pythonanywhere.com','localhost','127.0.0.1']
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
