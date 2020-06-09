@@ -114,11 +114,11 @@ class Search :
             title = self.preprocess(article["title"], slice=True)
             if title in self.tmp_titles :  # 중복검사- 이미 있으면 건너뜀.
                 continue
-            print(title)
+            # print(title)
             time = datetime.datetime.strptime(article['pubDate'], '%a, %d %b %Y %H:%M:%S %z')
             strtime = time.strftime("%Y-%m-%d %H:%M")
             date = time.date()
-            print(date)
+            # print(date)
             if start <= date :  # 기간에 맞는 기사만 저장.
                 cnt += 1
             else :
@@ -168,12 +168,12 @@ class Search :
             if title in title_list :  # 이미 있는 뉴스는 저장 안함.
                 continue
             title_list.append(title)
-            print(title)
+            # print(title)
 
             time = datetime.datetime.strptime(article['pubDate'], '%a, %d %b %Y %H:%M:%S %z')
             strtime = time.strftime("%Y-%m-%d %H:%M")
             date = time.date()
-            print(date)
+            # print(date)
             if start <= date <= end :  # 기간에 맞는 기사만 저장.
                 cnt += 1
             else :
@@ -219,7 +219,7 @@ class Search :
                 tmp_result = self.get_articles_original(responsejson)
             else :
                 tmp_result.extend(self.get_articles_wc(responsejson, period))
-                if len(tmp_result) < 5 :  # 값이 5개 이상 안나왔으면 다시 시도..
+                if len(tmp_result) < 3 :  # 값이 3개 이상 안나왔으면 다시 시도..
                     print("true.... there is nothing..")
                     continue
 
@@ -271,7 +271,7 @@ class Search :
             SimTopic.objects.create(origin_topic=self.model_topic,
                                     simtopic=topic10[i][0],
                                     simrank=(i + 1),
-                                    similarity=round(topic10[i][1], 2))
+                                    similarity=round(topic10[i][1]*100, 2))
         for i, t in enumerate(topic10) :
             print(str(i) + 'st of new 10 topics : ' + str(t[0]))
         return topic10
@@ -279,7 +279,7 @@ class Search :
     def select_10art_use_simwords(self, topic10) :
         start = time.time()
         # 총 10번 api 사용하여 총 100개 기사 추출 - self.articles에 저장
-        for t in topic10 :
+        for t in topic10[:5] :  # 10개 씩 5번 호출로 임시 변경
             tem = [t[0], self.topic]
             arlist = self.get_result(tem, period=0)  # 10 개 기사 추출 - api 1번 호출
             self.articles.extend(arlist)
