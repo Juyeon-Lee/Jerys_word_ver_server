@@ -37,6 +37,7 @@ class Crawler :
     def get_reactions_a_url(self, url):
         """
         url를 이용하여 한 기사의 댓글을 최대 50개 크롤링 후 self.List에 append
+        20개만으로 수정
         """
         text = " "
 
@@ -68,8 +69,8 @@ class Crawler :
                 break
             else :
                 page += 1
-                # 2페이지(댓글 40개)까지 긁어오기
-                if page > 2 :
+                # 2페이지(댓글 40개)까지 긁어오기 => 1페이지만으로 수정
+                if page >= 2 :
                     break
 
     def flatten(self, topic):
