@@ -7,6 +7,7 @@ from django.core import serializers
 import subprocess, json
 from .forms import TopicForm, TopicForm2
 from .models import Topic, Article, WordCloud
+from ..scripts.search import run
 
 
 class IndexFormViewCreate(FormView):  # index
@@ -123,14 +124,17 @@ def call_search_py(topic_id):  # str_topic
 
     # process 결과 출력, 예외처리
     try :
-        print('Running command : %s' % (subprocess.list2cmdline(args))) # args출력
-        subprocess.check_call(args, shell=True) # search.py 연결
+        #print('Running command : %s' % (subprocess.list2cmdline(args))) # args출력
+        print('Call Search.run()')
+        #subprocess.check_call(args, shell=True) # search.py 연결
+        run(str(topic_id))
         print('search.py 사용 OK')
-    except subprocess.CalledProcessError as e :  # search.py 예외처리
+    except Exception as e :  # search.py 예외처리
         print('Command makes an error')
         # print(e.returncode)
-        if e.returncode == 401 :  # 학습되지 않은 마이너 단어를 입력했을 때
-            return "유효한 검색어를 입력하세요."
-        else :  # news.py 에서의 오류
-            return "검색 도중에 오류가 발생하였습니다.(using search.py)"
+        #if returncode == 401 :  # 학습되지 않은 마이너 단어를 입력했을 때
+        #    return "유효한 검색어를 입력하세요."
+        #else :  # news.py 에서의 오류
+        #    return "검색 도중에 오류가 발생하였습니다.(using search.py)"
+        return "검색 도중에 오류가 발생하였습니다.(using search.py)"
     return 'OK'
