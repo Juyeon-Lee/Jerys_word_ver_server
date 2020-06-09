@@ -33,7 +33,7 @@ class Crawler :
         for url in self.urls:
             self.get_reactions_a_url(url)
         self.flatten(topic)         # reactions. txt 생성
-        
+
     def get_reactions_a_url(self, url):
         """
         url를 이용하여 한 기사의 댓글을 최대 50개 크롤링 후 self.List에 append
@@ -79,7 +79,8 @@ class Crawler :
         """
         # TODO: 중복을 막기 위한 파일명 설정
         flatList = []
-        file_name = ("scripts/static/%s_%d.txt" % (topic, self.period))
+        THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+        file_name = os.path.join(THIS_FOLDER, "%s_%d.txt" % (topic, self.period))
 
         if os.path.exists(file_name):
             os.remove(file_name)

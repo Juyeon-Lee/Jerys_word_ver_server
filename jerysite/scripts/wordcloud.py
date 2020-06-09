@@ -29,14 +29,16 @@ class Wordcloud:
 
         # 일단 텍스트 파일에서 가져오는 걸로 해놈
         text = ''
-        file_reactions = ("scripts/static/%s_%d.txt" % (topic, period))
-        with open(os.path.join(settings.BASE_DIR, file_reactions), encoding="utf-8") as f:
+        THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+        file_reactions = os.path.join(THIS_FOLDER, "%s_%d.txt" % (topic, period))
+        # with open(os.path.join(settings.BASE_DIR, file_reactions), encoding="utf-8") as f:
+        with open(file_reactions, encoding="utf-8") as f:
             text = f.read()
             #first_char = f.read(1)
             if not text:
                 print("file is empty")
                 # 임시 텍스트 파일 삭제
-                os.remove(os.path.join(settings.BASE_DIR, file_reactions))
+                os.remove(file_reactions)
                 return
             else:
                 print("file is full")
@@ -69,29 +71,30 @@ class Wordcloud:
         # 워드 클라우드 생성
         print(topic)
         file_name = (topic + "_%d" % self.model_topic.id + "_%d.png" % period)  # topic 2개이면 파일명 'topic1_topic2_10_1.png'
-        mask = np.array(Image.open(os.path.join(settings.BASE_DIR, 'scripts/static/mask_img_512px.png')))
-        wc_image_gen = wc(font_path=os.path.join(settings.BASE_DIR, 'scripts/static/NanumSquareEB.ttf'),
+        mask = np.array(Image.open(os.path.join(THIS_FOLDER, 'mask_img_512px.png')))
+        wc_image_gen = wc(font_path=os.path.join(THIS_FOLDER, 'NanumSquareEB.ttf'),
                             mask=mask,
                           background_color='white'
                           ).generate_from_frequencies(tags)   # wordcloud 용 댓글 하나도 없을 경우..
-        wc_image_gen.to_file('scripts/static/'+file_name)  # 경로에 이미지 파일 생성
+        wc_image_gen.to_file(os.path.join(THIS_FOLDER,file_name))  # 경로에 이미지 파일 생성
 
-        with open(os.path.join(settings.BASE_DIR, 'scripts/static/'+file_name), 'rb') as tmp_file:
+    #file_reactions = os.path.join(THIS_FOLDER, "%s_%d.txt" % (topic, period))
+        with open(os.path.join(THIS_FOLDER, file_name), 'rb') as tmp_file:
             # tmp_wc = WordCloud(period=period, topic=self.model_topic)
             # get해서 해야됨. -> django db 에 저장
             tmp_wc = WordCloud.objects.filter(topic=self.model_topic, period=period).first()
             tmp_wc.wcphoto.save(file_name, File(tmp_file))
 
         # 임시 이미지 파일 삭제
-        os.remove(os.path.join(settings.BASE_DIR, 'scripts/static/'+file_name))
+        os.remove(os.path.join(THIS_FOLDER, file_name))
         # 임시 텍스트 파일 삭제
-        os.remove(os.path.join(settings.BASE_DIR, file_reactions))
+        os.remove(file_reactions)
         """
         # Display the generated image:
         plt.imshow(wc_image_gen, interpolation='bilinear')
         plt.axis("off")
         plt.show()
-        
+
         """
 
         # end_time = time.time()

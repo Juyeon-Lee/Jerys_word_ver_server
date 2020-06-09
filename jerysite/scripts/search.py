@@ -24,9 +24,9 @@ from konlpy.tag import Okt
 from news.models import Topic, SimTopic  # 빨간줄이지만 잘 실행됨.
 from news.models import Article, WordCloud, WCArticle  # 빨간줄이지만 잘 실행됨.
 
-from .article import Article as art  # jerysite.scripts
-from .wordcloud import Wordcloud as main_wc
-from .crawler import Crawler
+from scripts.article import Article as art  # jerysite.scripts
+from scripts.wordcloud import Wordcloud as main_wc
+from scripts.crawler import Crawler
 
 
 class Search :
@@ -400,6 +400,7 @@ class Search :
         print("Article Django Model에 저장 WorkTime: {0:0.2f} sec\n".format(store_art_time - select10_time))
         print("Crawler 세팅, wcart 저장 WorkTime: {0:0.2f} sec\n".format(wcart_store_time - store_art_time))
         print("댓글 모아 wc 이미지 생성 WorkTime: {0:0.2f} sec\n".format(end_time - wcart_store_time))
+        return 0
 
 
 # runscript를 위함

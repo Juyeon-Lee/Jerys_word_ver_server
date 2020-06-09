@@ -7,7 +7,7 @@ from django.core import serializers
 import subprocess, json
 from .forms import TopicForm, TopicForm2
 from .models import Topic, Article, WordCloud
-from ..scripts.search import run
+from scripts.search import run
 
 
 class IndexFormViewCreate(FormView):  # index
@@ -118,18 +118,27 @@ def call_search_py(topic_id):  # str_topic
     비동기 함수 처리 - return 까지 기다리지 않음.
     topic에 잘못된 값이 있으면 호출 안 됨.
     """
-    # use news and get list of top10 기사 
+    # use news and get list of top10 기사
     #                                    3 (필수)/search.py명/인자넣을거임/인자
-    args = ['python', 'manage.py', 'runscript', 'search', '--script-args', str(topic_id)]
+    #args = ['python', 'manage.py', 'runscript', 'search', '--script-args', str(topic_id)]
 
     # process 결과 출력, 예외처리
+    print('Call Search.run()')
+    returncode = run(str(topic_id))
+    if returncode ==0 :
+        print('search.py 사용 OK')
+    else :  # search.py 예외처리
+        print('Command makes an error')
+        return "검색 도중에 오류가 발생하였습니다.(using search.py)"
+
+    """
     try :
         #print('Running command : %s' % (subprocess.list2cmdline(args))) # args출력
         print('Call Search.run()')
         #subprocess.check_call(args, shell=True) # search.py 연결
         run(str(topic_id))
         print('search.py 사용 OK')
-    except Exception as e :  # search.py 예외처리
+    except Exception as e :
         print('Command makes an error')
         # print(e.returncode)
         #if returncode == 401 :  # 학습되지 않은 마이너 단어를 입력했을 때
@@ -137,4 +146,5 @@ def call_search_py(topic_id):  # str_topic
         #else :  # news.py 에서의 오류
         #    return "검색 도중에 오류가 발생하였습니다.(using search.py)"
         return "검색 도중에 오류가 발생하였습니다.(using search.py)"
+    """
     return 'OK'
