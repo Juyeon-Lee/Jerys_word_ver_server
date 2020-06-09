@@ -34,7 +34,8 @@ class Article:
         """
         __url__ = self.url
         # TODO: csv 파일로 연결 예정
-        with open(os.path.join(settings.BASE_DIR, 'scripts/static/dict.pickle'), 'rb') as handle:
+        THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(THIS_FOLDER, 'dict.pickle'), 'rb') as handle:
             dic = pickle.load(handle)
 
         # 네이버 주요 언론사

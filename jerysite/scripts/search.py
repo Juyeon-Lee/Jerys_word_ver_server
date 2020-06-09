@@ -38,7 +38,8 @@ class Search :
     def __init__(self, topic_id) :
         self.tmp_titles = []  # 기사 중복 막기 위해 제목 저장
         self.articles = []
-        model = gensim.models.Word2Vec.load(os.path.join(settings.BASE_DIR, 'scripts/static/model_updated.model'))
+        THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+        model = gensim.models.Word2Vec.load(os.path.join(THIS_FOLDER, 'model_updated.model'))
         self.wv = model.wv
         del model
         print(topic_id)
@@ -248,7 +249,8 @@ class Search :
         # Tokenizing
         okt = Okt()
         tokenlist = okt.nouns(s)  # 단어 토큰화, 명사만 리스트에 넣음
-        with open(os.path.join(settings.BASE_DIR, 'scripts/static/stopwords.txt'), 'rt', encoding='UTF8') as f :
+        THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(THIS_FOLDER, 'stopwords.txt'), 'rt', encoding='UTF8') as f :
             b = f.read().split()
             for i in b :
                 if i in tokenlist :
