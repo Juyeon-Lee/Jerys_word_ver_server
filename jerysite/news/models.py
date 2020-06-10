@@ -80,7 +80,7 @@ class WordCloud(models.Model) :
         return self.topic.__str__()
 
     class Meta :
-        ordering = ['period']
+        ordering = ['-period']
 
     ## 객체의 상세 페이지의 주소를 반환하는 메서드
     ## revers("상세화면 패턴이름", args[url만드는데 필요한 pk값 리스트로 전달])
@@ -100,7 +100,7 @@ class WCArticle(models.Model) :
     def __str__(self) :  ## 객체(obj)를 출력할 때 나타날 값
         return self.title
 """
-내용에 대한 쿼리용 함수를 만드려면 : 
+내용에 대한 쿼리용 함수를 만드려면 :
 https://docs.djangoproject.com/ko/3.0/intro/tutorial02/
 
 모델 변경 후 지침

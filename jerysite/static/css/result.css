@@ -3,7 +3,7 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-small-business/blob/master/LICENSE)
  */
- body {
+body {
   padding-top: 54px;
 }
 
@@ -59,6 +59,7 @@ li.article-list:hover{
 }
 
 div.press-company{
+  text-align: center;
   font-size: 1.2rem;
   display: table;
 }
@@ -73,6 +74,7 @@ div.article-title{
 }
 
 div.article-preview{
+  text-align: left;
   color: #8C8C8C;
   font-size: 1.1rem;
   padding-left: 0.5rem;
