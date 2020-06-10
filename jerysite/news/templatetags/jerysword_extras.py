@@ -13,7 +13,7 @@ def subDays(days) :
 
 
 @register.filter(name='split')
-def split(value, key) :
+def split(value) :
     """
     Replace ' ' to ','
     {% with value|split as details %}
