@@ -31,8 +31,9 @@ header.topics{
   height: auto;
 }
 
-h5.sty{
+.sty{
     color: #ffb907;
+    margin-bottom: 1rem;
 }
 
 ul.topic-list{
@@ -93,6 +94,7 @@ div.sim-value{
   padding-top: 10px;
   padding-bottom: 10px;
   border-radius: 2rem;
+ 
 }
 
 div.value1{
