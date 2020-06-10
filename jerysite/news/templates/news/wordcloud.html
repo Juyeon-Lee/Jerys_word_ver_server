@@ -24,7 +24,7 @@
     <link href="{% static 'css/index.css' %}" rel="stylesheet" />
     <link href="{% static 'css/result.css' %}" rel="stylesheet" />
     <link href="{% static 'css/wordcloud.css' %}" rel="stylesheet" />
-    
+
 </head>
 
 <body>
@@ -90,11 +90,13 @@
                 <div id="article" class="row">
                   <div class="col-12 col-md-12">
                     <!-- 기사 제목 값 -->
-                    <a href="{{ wcart.url }}">
+                    <a href="{{ wcart.url }}" target="_blank" rel="noopener noreferrer">
                       <div class="article-title row">
+                          <b>
                         {% autoescape off %}
                             {{ wcart.title }}
                         {% endautoescape %}
+                        </b>
                       </div>
                     </a>
                     <!-- 기사 프리뷰 -->

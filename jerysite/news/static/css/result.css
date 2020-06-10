@@ -131,3 +131,9 @@ div.value10{
   color: #fed136;
   margin-bottom: 0rem;
 }
+
+.card-text-style{
+    font-family: NanumsquareEB;
+    background: #ffd86e;
+    color: #ffffff
+}

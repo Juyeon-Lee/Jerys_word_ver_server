@@ -51,7 +51,7 @@
 
                     <img src="{% static 'img/loading_spinner.gif' %}" />
                     <p><b>유사도에 따른 기사와 댓글 워드 클라우드를 추출 중입니다.<br> 잠시만 기다려주세요.<br>
-                    간혹 서버 문제에 따라 30~40초 이상 시간이 소요되는 경우가 있습니다.<b></p>
+                    간혹 서버 문제에 따라 30~40초 이상 시간이 소요되는 경우가 있습니다.</b></p>
                 </div>
             </div>
         </div>
@@ -91,6 +91,7 @@
     <div>
     <!-- ""부분에 키워드 넘겨주기-->
       <h3>"{{topic.topic}}"(으)로 검색한 결과</h3>
+      <p class="text-muted mt-1">※ 기사 제목 옆 퍼센티지는 키워드와 기사 간의 유사도 입니다.</p>
     </div>
 
     <!--기사 리스트 레이아웃-->
@@ -106,18 +107,20 @@
               </div>
               <div class="col-9 col-md-8">
                 <!-- 기사 제목 -->
-                  <a href="{{ art.url }}">
+                  <a href="{{ art.url }}" target="_blank" rel="noopener noreferrer">
                     <div id="articleTtl1" class="article-title row">
+                        <b>
                         {% autoescape off %}
                             {{ art.title }}
                         {% endautoescape %}
+                        </b>
                     </div>
                   </a>
                 <!-- 기사 프리뷰 / 날짜 -->
                 <div id="articlePre1" class="article-preview row">
                   {% autoescape off %}
                     {{ art.description }}
-                  {% endautoescape %}
+                  {% endautoescape %}...
                   <br>| {{art.time}}
                 </div>
               </div>
@@ -153,13 +156,13 @@
               <img class="card-img-top" src="{% static 'img/no_image.png' %}" alt="wordcloud1">
             {% endif %}
           </a>
-          <div class="card-body">
+          <div class="card-body card-text-style">
             <!-- 워드클라우드 날짜 삽입 위치 -->
               <!-- 날짜 세팅  00/00 ~ 00/00(기간: {{wc.period}})-->
             <p class="card-text text-center">
                 {% cycle '7' '4' '0' as end1 silent %}
                 {% cycle '9' '6' '3' as start1 silent %}
-                {{ end1|subDays|date:"m월 d일"}} ~ {{ start1|subDays|date:"m월 d일"}}
+                {{ start1|subDays|date:"m월 d일"}} ~ {{ end1|subDays|date:"m월 d일"}}
 
             </p>
           </div>
