@@ -58,13 +58,13 @@
   <!-- Page Content -->
   <div class="container">
     <!-- Heading Row -->
-    <div class="row align-items-center my-5">
+    <div class="row my-5">
       <div class="col-lg-4 col-sm-12 text-center">
         <!-- 워드 클라우드 이미지 삽입 위치 -->
         {% if object.wcphoto %}
-          <img class="img-fluid rounded mb-4 mb-lg-0" src="{{ object.wcphoto.url }}" alt="wordcloud-detail">
+          <img class="img-fluid rounded mb-4 mb-lg-0" id="wcimg" src="{{ object.wcphoto.url }}" alt="wordcloud-detail">
         {% else %}
-          <img class="img-fluid rounded mb-4 mb-lg-0" src="{% static 'img/no_image.png' %}" alt="wordcloud-detail">
+          <img class="img-fluid rounded mb-4 mb-lg-0" id="wcimg" src="{% static 'img/no_image.png' %}" alt="wordcloud-detail">
         {% endif %}
       </div>
       <!-- /.col-lg-8 -->

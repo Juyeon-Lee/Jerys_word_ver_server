@@ -20,3 +20,8 @@ body {
   right: 0;
   left: 1rem;
 }
+
+img#wcimg {
+  position: relative;
+  margin-top: 5rem;
+}
