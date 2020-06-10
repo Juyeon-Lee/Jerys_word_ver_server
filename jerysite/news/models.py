@@ -80,7 +80,7 @@ class WordCloud(models.Model) :
         return self.topic.__str__()
 
     class Meta :
-        ordering = ['period']
+        ordering = ['-period']
 
     ## 객체의 상세 페이지의 주소를 반환하는 메서드
     ## revers("상세화면 패턴이름", args[url만드는데 필요한 pk값 리스트로 전달])
