@@ -16,7 +16,7 @@ div#loading{
     z-index: 9999;
     background-color: rgba(219, 219, 219, 0.938);
     opacity: 1;  /*투명도*/
-    padding: 20%;
+    padding: 10%;
 }
 
 div.container-index {

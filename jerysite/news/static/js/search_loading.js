@@ -37,7 +37,7 @@ $(document).ready(function () {
                 || (new RegExp(/[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\"\'…{}]/gi)).test($("#topic-index-text").val()) //특수문자
                 || (new RegExp(/[ㄱ-ㅎ|ㅏ-ㅣ]/gi)).test($("#topic-index-text").val())
             ) {
-                alert("영문자/특수문자/자음만/모음만을 제외하고 입력하세요.");
+                alert("올바르지 않은 글자(영문자, 특수문자 등)를 제외하고 입력하세요.");
                 flag = 0;
             } else if ((new RegExp(/[0-9]/gi)).test($("#topic-index-text").val())) { //숫자
                 var input_splited = $("#topic-index-text").val().split(' ');
@@ -73,9 +73,7 @@ $(document).ready(function () {
                         // $('input').prop('disabled', true);
                     },
                     error: function (response) {
-                        // alert the error if any error occured
-                        // TODO: undefined error 수정 - {{error_message}} 내용 바꾸던지..!
-                        console.log(JSON.parse(response.responseJSON).error.topic[0]);
+                        //console.log(JSON.parse(response.responseJSON).error.topic[0]);
                         alert("올바르지 못한 단어 혹은 학습되지 않은 단어가 있습니다. 확인 후 다시 입력해주세요.");
                         window.location.reload();   //페이지 새로고침
                     }
@@ -133,9 +131,7 @@ $("#form_search_result").submit(function (e) {
                 $('input').prop('disabled', true);
             },
             error: function (response) {
-                // alert the error if any error occured
-                // TODO: undefined error 수정 - {{error_message}} 내용 바꾸던지..!
-                console.log(JSON.parse(response.responseJSON).error.topic[0]);
+                //console.log(JSON.parse(response.responseJSON).error.topic[0]);
                 alert("올바르지 못한 입력 혹은 학습되지 않은 단어가 있습니다. 확인 후 다시 입력해주세요.");
                 window.location.reload();   //페이지 새로고침
             }
