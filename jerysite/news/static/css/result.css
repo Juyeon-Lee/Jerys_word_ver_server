@@ -59,6 +59,7 @@ li.article-list:hover{
 }
 
 div.press-company{
+  text-align: center;
   font-size: 1.2rem;
   display: table;
 }
@@ -73,6 +74,7 @@ div.article-title{
 }
 
 div.article-preview{
+  text-align: left;
   color: #8C8C8C;
   font-size: 1.1rem;
   padding-left: 0.5rem;
@@ -128,4 +130,10 @@ div.value10{
   font-family: "Montserrat";
   color: #fed136;
   margin-bottom: 0rem;
+}
+
+.card-text-style{
+    font-family: NanumsquareEB;
+    background: #ffd86e;
+    color: #ffffff
 }
