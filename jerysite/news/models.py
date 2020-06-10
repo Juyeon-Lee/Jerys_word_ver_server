@@ -16,22 +16,23 @@ class TopicField(models.CharField) :
         else :
             return value
 
+## search_loading.js에서 예외처리함
 
-def topic_validator(value) :
-    flag = 1
-    if re.search('[0-9]+', value) is not None :
-        flag = 0
-        raise forms.ValidationError("숫자를 제외하고 입력하세요.")
-    if re.search('[a-zA-Z]+', value) is not None :
-        flag = 0
-        raise forms.ValidationError("영문자를 제외하고 입력하세요.")
-    if re.search('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\"\'…》]', value) is not None :
-        flag = 0
-        raise forms.ValidationError("특수문자를 제외하고 입력하세요.")
+# def topic_validator(value) :
+#     flag = 1
+#     if re.search('[0-9]+', value) is not None :
+#         flag = 0
+#         raise forms.ValidationError("숫자를 제외하고 입력하세요.")
+#     if re.search('[a-zA-Z]+', value) is not None :
+#         flag = 0
+#         raise forms.ValidationError("영문자를 제외하고 입력하세요.")
+#     if re.search('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\"\'…》]', value) is not None :
+#         flag = 0
+#         raise forms.ValidationError("특수문자를 제외하고 입력하세요.")
 
 
 class Topic(models.Model) :
-    topic = TopicField(max_length=20, validators=[topic_validator])
+    topic = TopicField(max_length=20) # validators=[topic_validator]
     date = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_absolute_url(self) :  # 안 쓰임. 이 함수를 추가하거나 view에 success_url을 추가해야 한다.

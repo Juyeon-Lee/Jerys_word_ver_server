@@ -3,7 +3,7 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-small-business/blob/master/LICENSE)
  */
-body {
+ body {
   padding-top: 54px;
 }
 
@@ -15,9 +15,9 @@ div#loading{
   top:0;
   bottom:0;
   z-index: 9999;
-  background-color: #DDDDDD;
-  opacity: 0.6;  /*투명도*/
-  padding: 20%;
+  background-color: rgba(219, 219, 219, 0.952);
+  opacity: 1;  /*투명도*/
+  padding: 10%;
 }
 
 img#btn-search{
