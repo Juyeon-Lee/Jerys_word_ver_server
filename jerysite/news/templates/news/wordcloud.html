@@ -43,7 +43,7 @@
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {% for other in object.topic.wordcloud_set.all %}
                       <a class="dropdown-item" href="{{ other.get_absolute_url }}">
-                          {% cycle '0일~3일 전' '4일~6일 전' '7일~9일 전' %}
+                          {% cycle '9일~7일 전' '6일~4일 전' '3일~0일 전'  %}
                       </a>
                       {% if not forloop.last %}  <!--마지막 아닐때만 분리선 출력-->
                         <div class="dropdown-divider"></div>
@@ -74,11 +74,11 @@
             <!-- 설정한 날짜 값 넘겨주기 -->
             <h4>
                 {% if object.period == '1' %}
-                    {% now "m월 d일"%} ~ {{ 3|subDays|date:"m월 d일"}}
+                    {{ 3|subDays|date:"m월 d일"}} ~ {% now "m월 d일"%}
                 {% elif object.period == '2' %}
-                    {{ 4|subDays|date:"m월 d일"}} ~ {{ 6|subDays|date:"m월 d일"}}
+                    {{ 6|subDays|date:"m월 d일"}} ~ {{ 4|subDays|date:"m월 d일"}}
                 {% else %}
-                    {{ 7|subDays|date:"m월 d일"}} ~ {{ 9|subDays|date:"m월 d일"}}
+                    {{ 9|subDays|date:"m월 d일"}} ~ {{ 7|subDays|date:"m월 d일"}}
                 {% endif%}
                  검색 결과
             </h4>
