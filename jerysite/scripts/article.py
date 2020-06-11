@@ -33,13 +33,14 @@ class Article:
         :return:
         """
         __url__ = self.url
+
         # TODO: csv 파일로 연결 예정
         THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
         with open(os.path.join(THIS_FOLDER, 'dict.pickle'), 'rb') as handle:
             dic = pickle.load(handle)
 
         # 네이버 주요 언론사
-        if __url__.startswith("https://news.naver.com"):  # url 이 news.naver.com으로 안나오는 경우를 위하여
+        if __url__.startswith("https://news.naver.com") or __url__.startswith("http://news.naver.com"):  # url 이 news.naver.com으로 안나오는 경우를 위하여
             raw = requests.get(__url__, headers={'User-Agent': 'Mozilla/5.0'}).text
             html = BeautifulSoup(raw, 'html.parser')
             content = str(html.select('#main_content > div.article_header > div.press_logo > a > img'))
@@ -48,6 +49,17 @@ class Article:
             # 문자열 슬라이싱
             start = int(content.find("title=", 1)) + 7
             finish = int(content.find("/>")) - 1
+            title = content[start:finish]
+
+        elif __url__.startswith("https://sports.news.naver.com")  or __url__.startswith("http://sports.news.naver.com") :
+            print("sports news success")
+            raw = requests.get(__url__, headers={'User-Agent': 'Mozilla/5.0'}).text
+            html = BeautifulSoup(raw, 'html.parser')
+            content = str(html.select('#pressLogo > a > img'))
+
+            #문자열 슬라이싱
+            start = int(content.find("setPressLogo(",7))+14
+            finish = int(content.find("');"))
             title = content[start:finish]
 
         else:  # 그 외
