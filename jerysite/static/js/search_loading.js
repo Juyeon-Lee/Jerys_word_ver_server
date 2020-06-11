@@ -41,18 +41,18 @@ $(document).ready(function () {
                 alert("올바르지 않은 글자(영문자, 특수문자, 숫자 등)를 제외하고 입력하세요.");
                 flag = 0;
             } 
-            // else if ((new RegExp(/[0-9]/gi)).test($("#topic-index-text").val())) { //숫자
-            //     var input_splited = $("#topic-index-text").val().split(' ');
-            //     for (var i = 0 in input_splited) {    //나눠서 한 문자열씩 검사
-            //         console.log(input_splited[i]);
-            //         if (new RegExp(/[가-힣]/gi).test(input_splited[i])); //한글있으면 통과
-            //         else {  //한글 포함 안된게 하나라도 있으면 break
-            //             alert("숫자만 입력된 검색어가 있습니다. 확인 후 다시 입력해주세요.");
-            //             flag = 0;
-            //             break;
-            //         }
-            //     }
-            // }
+            // else if ((new RegExp(/[0-9]/gi)).test($("#topic-main-text").val())) { //숫자
+    //     var input_splited = $("#topic-main-text").val().split(' ');
+    //     for (var i = 0 in input_splited) {    //나눠서 한 문자열씩 검사
+    //         console.log(input_splited[i]);
+    //         if (new RegExp(/[가-힣]/gi).test(input_splited[i])); //한글있으면 통과
+    //         else {  //한글 포함 안된게 하나라도 있으면 break
+    //             alert("숫자만 입력된 검색어가 있습니다. 다시 확인해주세요.");
+    //             flag = 0;
+    //             break;
+    //         }
+    //     }
+    // }
             if (flag === 1) {
                 console.log("ajax 실행");
                 $.ajax({
@@ -106,6 +106,7 @@ $("#form_search_result").submit(function (e) {
     } 
     
     if (flag === 1) {
+        console.log("ajax 실행");
         $.ajax({
             type: 'POST',
             url: "",
