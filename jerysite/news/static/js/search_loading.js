@@ -106,6 +106,7 @@ $("#form_search_result").submit(function (e) {
     } 
     
     if (flag === 1) {
+        console.log("ajax 실행");
         $.ajax({
             type: 'POST',
             url: "",
