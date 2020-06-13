@@ -60,6 +60,8 @@ class Wordcloud:
 
         # 빈도수 계산
         count = Counter(words)
+        #count = Counter(nouns)
+
         # 상위 100건 추출
         most = count.most_common(100)
 
