@@ -5,8 +5,8 @@
 JERY's Word.iml
 
 # 부산물
-/news_w2v/data.txt
-/news_w2v/log.log
+/w2v_model/data.txt
+/w2v_model/log.log
 
 *.pyc
 *.cpython-37.pyc
