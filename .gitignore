@@ -18,6 +18,8 @@ db.sqlite3
 .DS_Store
 .vscode
 settings.json
+# 비밀 데이터- 보안 위해
+.env
 
 # Created by https://www.gitignore.io/api/venv,python,pycharm,windows,jupyternotebooks
 # Edit at https://www.gitignore.io/?templates=venv,python,pycharm,windows,jupyternotebooks

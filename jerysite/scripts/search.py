@@ -80,8 +80,8 @@ class Search :
                )
         print(url)
         """set request using url"""
-        client_id = "waVUZElBGQAO9PS_ECpn"  # 개발자센터에서 발급받은 Client ID 값
-        client_secret = "eG1ROqWCAo"  # 개발자센터에서 발급받은 Client Secret 값
+        client_id = os.getenv("NAVER_API_ID")  # 개발자센터에서 발급받은 Client ID 값
+        client_secret = os.getenv("NAVER_API_PW")  # 개발자센터에서 발급받은 Client Secret 값
         request = urllib.request.Request(url)
         request.add_header("X-Naver-Client-Id", client_id)
         request.add_header("X-Naver-Client-Secret", client_secret)
