@@ -10,7 +10,7 @@ from .models import Topic, Article, WordCloud
 from scripts.search import run
 
 
-class IndexFormViewCreate(FormView):  # index
+class IndexFVCreate(FormView):  # index
     model = Topic
     form_class = TopicForm
     object = None
@@ -59,14 +59,14 @@ class IndexFormViewCreate(FormView):  # index
         return JsonResponse(res_json, safe=False, status=400)
 
 
-class IndexFormViewUpdate(IndexFormViewCreate):  # result page
+class IndexFVUpdate(IndexFVCreate):  # result page
     model = Topic
     template_name = 'news/result.html'
     form_class = TopicForm2
     object = None
 
     def get_context_data(self, **kwargs):
-        super(IndexFormViewCreate, self).get_context_data(**kwargs)
+        super(IndexFVCreate, self).get_context_data(**kwargs)
         kwargs['form'] = self.form_class(instance=self.object)
         kwargs['pk'] = self.kwargs.get('pk')
         kwargs['topic'] = self.object
@@ -84,29 +84,6 @@ class IndexFormViewUpdate(IndexFormViewCreate):  # result page
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
-
-
-class IndexFormViewDelete(IndexFormViewCreate):
-    template_name = ''
-
-    def post(self, request, *args, **kwargs):
-        return self.delete(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        self.get_object().delete()
-        return redirect(self.success_url)
-
-
-def wclist(request, topic) :
-    context = {'form' : TopicForm2(), 'topic' : topic}
-    return render(request, "news/wordcloud.html", context)
-
-
-def wcphoto_list(request) :
-    """기사&워드클라우드"""
-    wcphotos = WordCloud.objects.all()
-    return render(request, 'news/wordcloud.html', {'wcphoto':wcphotos})
-    # wcphoto라는 템플릿 변수 같이 전달
 
 
 class WordCloudDV(DetailView):
